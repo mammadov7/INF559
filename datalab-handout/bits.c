@@ -123,11 +123,7 @@ NOTES:
  *   Rating: 1
  */
 int func1(int x) {
-
-
-
-  return 2;
-
+  return  !x  ;
 }
 
 /* 
@@ -139,9 +135,7 @@ int func1(int x) {
  */
 int func2(int x, int y) {
 
-
-
-  return 2;
+    return (x&y);
 
 }
 
