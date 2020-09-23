@@ -1,7 +1,7 @@
 /* 
  * INF559 Data Lab 
  * 
- * <Please put your name and userid here>
+ * Ali MAMMADOV, ali.mammadov
  * 
  * bits.c - Source file with your solutions to the Lab.
  *          This is the file you will hand in to your instructor.
@@ -135,7 +135,7 @@ int func1(int x) {
  */
 int func2(int x, int y) {
 
-    return (x&y);
+    return (~x)&(~y);
 
 }
 
@@ -148,10 +148,9 @@ int func2(int x, int y) {
  *  Rating: 1
  */
 int func3(int n) {
+  return ( 0 >> n )
 
 
-
-  return 2;
 
 }
 
