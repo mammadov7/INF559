@@ -173,14 +173,8 @@ int func4(int x) {
  *   Rating: 2
  */
 int func5(int x) {
-
-
-
-
-
-
-
-  return 2;
+  
+  return  !(x ^ 0x55 ^ (0x55<<8)  ^ (0x55<<16) ^ (0x55<<24)) ;
 
 }
 
