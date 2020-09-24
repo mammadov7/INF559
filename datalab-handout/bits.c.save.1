@@ -1,4 +1,4 @@
-	/* 
+/* 
  * INF559 Data Lab 
  * 
  * Ali MAMMADOV, ali.mammadov
@@ -207,7 +207,7 @@ int func5(int x) {
  */
 int func6(int x, int n) {
 
-  return (x >> n) & ( ~(!!n << 31) >> (n+~0) );
+  return x >> n;
 
 }
 
@@ -235,7 +235,9 @@ int func7(int x) {
  */
 int func8(void) {
 
-  return 1<<31;
+
+
+  return 2;
 
 }
 
@@ -248,7 +250,8 @@ int func8(void) {
  */
 int func9(int x) {
 
-  return !( (!(~x)) | (~(x+1)^x) );
+  return 1 ;
+
 }
 
 /* 
@@ -260,7 +263,9 @@ int func9(int x) {
  */
 int func10(int x) {
 
-  return ~x+1;
+
+
+  return 2;
 
 }
 
