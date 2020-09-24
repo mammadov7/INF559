@@ -123,11 +123,7 @@ NOTES:
  *   Rating: 1
  */
 int func1(int x) {
-
-
-
   return !x;
-
 }
 
 /* 
@@ -139,10 +135,7 @@ int func1(int x) {
  */
 int func2(int x, int y) {
 
-
-
-  return (~x)&(~y);
-
+    return (~x)&(~y);
 }
 
 /* 
@@ -154,8 +147,6 @@ int func2(int x, int y) {
  *  Rating: 1
  */
 int func3(int n) {
-
-
 
   return (!!n << 31) >> (n+~0) ;
 
@@ -169,10 +160,6 @@ int func3(int n) {
  *   Rating: 2
  */
 int func4(int x) {
-
-
-
-
 
   return x << 31 >> 31;
 
