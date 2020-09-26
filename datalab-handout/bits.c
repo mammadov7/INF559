@@ -174,7 +174,7 @@ int func4(int x) {
  */
 int func5(int x) {
   
-  return  !(x ^ 0x55 ^ (0x55<<8)  ^ (0x55<<16) ^ (0x55<<24)) ;
+  return  !(~( x  | 0xaa | (0xaa<<8)  | (0xaa<<16) | (0xaa<<24) ))   ;
 
 }
 
@@ -199,9 +199,32 @@ int func6(int x, int n) {
  *   Max ops: 20
  *   Rating: 4
  */
-int func7(int x) {
-
-  return 2;
+int func7(int x) { 
+ /* Idea of my solution is that: 
+        1100 0011 1001 1110     We are dividing number 2 parts,
+                 ^              XOR between them, cause if in  
+                  1100 0011     initial number 0's are odd in
+                  ---------     the half number also will be odd              
+                  0101 1101     and if we will repeat it till 
+                      ^         the last bit and we will obtain
+                       0101     1 - if x is odd
+                       ----     0 - if x is even
+                       1000     after we set all bits of result      
+			^       to least significant bit     
+			 10     !!(1111111111111111) -> 1
+                         --     !!(0000000000000000) -> 0
+                         10     
+                         ^
+                          1                         
+                          -
+                          1           */         
+  x = x^(x>>16);
+  x = x^(x>>8);
+  x = x^(x>>4);  
+  x = x^(x>>2);
+  x = x^(x>>1);
+  x = !!(x << 31 >> 31);
+  return x;
 
 }
 
@@ -254,15 +277,15 @@ int func10(int x) {
  *   Rating: 3
  */
 int func11(int x, int y) {
-
-
-
-
-
-
-
-
-  return 2;
+  // x < 0 && y < 0 && z > 0 --> OVERFLOW
+  // x > 0 && y > 0 && z < 0 --> OVERFLOW
+  
+  int z = x+y;
+  x = x >> 31;
+  y = y >> 31;
+  z = z >> 31;
+  return !!((x^y) | !(y^z))  ;
+//  return  !(!(x^y) &  !!(y^z))   ;
 
 }
 
@@ -291,15 +314,7 @@ int func12(int x) {
  */
 int func13(int x, int y) {
 
-
-
-
-
-
-
-
-  return 2;
-
+  return x+y;
 }
 
 
