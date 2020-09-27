@@ -1,0 +1,41 @@
+create table person(pid int primary key, firstname varchar(128), lastname varchar(128));
+create table office(oid int primary key, positiontitle varchar(128), details varchar(128));
+create table heldOffice(pid int, oid int, ystart int, yend int,
+constraint fk_pid foreign key(pid) references person(pid),
+constraint fk_oid foreign key(oid) references office(oid)
+);
+
+
+
+insert into person values(1, 'Emmanuel', 'Macron');
+insert into person values(2, 'Jean', 'Castex');
+insert into person values(3, 'Elisabeth', 'Borne');
+insert into person values(4, 'Florence', 'Parly');
+insert into person values(5, 'Jean-Michel', 'Blanquer');
+insert into person values(6, 'Benoit', 'Hamon');
+insert into person values(7, 'Francois', 'Hollande');
+insert into person values(8, 'Nicolas', 'Hulot');
+insert into person values(9, 'Nicolas', 'Sarkozy');
+insert into person values(10, 'Manuel', 'Valls');
+
+insert into office values(1,'PR', 'Président de la République');
+insert into office values(2,'PM', 'Premier Ministre'); 
+insert into office values(3, 'MinEco', 'Ministre de l''Ecologie');
+insert into office values(4,'MinDef', 'Ministre de la Défense');
+insert into office values(5,'MinEdu', 'Ministre de l''Education');
+
+insert into heldOffice values(1, 1, 2017, 2021);
+insert into heldOffice values(2, 2, 2020, 2021);
+insert into heldOffice values(3, 3, 2019, 2021);
+insert into heldOffice values(4, 4, 2017, 2021);
+insert into heldOffice values(5, 5, 2017, 2021);
+insert into heldOffice values(6, 5, 2014, 2014);
+insert into heldOffice values(7, 1, 2012, 2016);
+insert into heldOffice values(8, 3, 2017, 2018);
+insert into heldOffice values(9, 1, 2007, 2011);
+insert into heldOffice values(10, 2, 2012, 2014);
+
+
+
+
+select lastname from person where firstname = 'Nicolas';

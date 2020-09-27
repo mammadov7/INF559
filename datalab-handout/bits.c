@@ -123,6 +123,7 @@ NOTES:
  *   Rating: 1
  */
 int func1(int x) {
+// No comment :)
   return !x;
 }
 
@@ -134,7 +135,7 @@ int func1(int x) {
  *   Rating: 1
  */
 int func2(int x, int y) {
-
+// De Morgan's laws
     return (~x)&(~y);
 }
 
@@ -147,9 +148,10 @@ int func2(int x, int y) {
  *  Rating: 1
  */
 int func3(int n) {
-
+  // if n is 0, answer will be 0, shifts can't change the 0 
+  // if not 0, (1 << 31) by setting 1 the most significant bit 
+  // and doing n - 1 times arithmetic right shitf, (+~0 = -1)
   return (!!n << 31) >> (n+~0) ;
-
 }
 
 /* 
@@ -160,7 +162,13 @@ int func3(int n) {
  *   Rating: 2
  */
 int func4(int x) {
-
+  /*
+    10101010....11  
+                 ^   least significant bit
+    10000000.....0   left shift 31 bits  
+    ^ making it most significant bit 
+    11111111.....1   arithmetic right shift 31 bits  
+  */
   return x << 31 >> 31;
 
 }
@@ -173,9 +181,17 @@ int func4(int x) {
  *   Rating: 2
  */
 int func5(int x) {
-  
-  return  !(~( x  | 0xaa | (0xaa<<8)  | (0xaa<<16) | (0xaa<<24) ))   ;
-
+  /*
+    0xaa = 10101010
+    01010101 01010101 01010101 01010101  by doing OR between 0xaa and
+                               10101010  even-numbered bits we will get
+                      10101010           only 1's and his complement will
+             10101010                    give us 0. So !0 = 1.
+    10101010  
+    ------------------------------------
+    11111111 11111111  11111111 11111111 
+  */
+  return  !(~( x  | 0xaa | (0xaa<<8)  | (0xaa<<16) | (0xaa<<24) ));
 }
 
 /* 
@@ -187,7 +203,16 @@ int func5(int x) {
  *   Rating: 3 
  */
 int func6(int x, int n) {
-
+  /*
+  right_part = ~(!!n << 31) >> (n+~0) this part explained in func3
+  
+  Ex:  
+   x = 1010 1100 1101 1001, n = 3, 
+   right_part = 0001 1111 1111 1111    AND operation
+       x >> 3 = 1111 0101 1001 1011 
+                -------------------
+                0001 0101 1001 1011 
+  */
   return (x >> n) & ( ~(!!n << 31) >> (n+~0) );
 
 }
@@ -210,8 +235,8 @@ int func7(int x) {
                        0101     1 - if x is odd
                        ----     0 - if x is even
                        1000     after we set all bits of result      
-			^       to least significant bit     
-			 10     !!(1111111111111111) -> 1
+	                  		^       to least significant bit     
+			                   10     !!(1111111111111111) -> 1
                          --     !!(0000000000000000) -> 0
                          10     
                          ^
@@ -225,7 +250,6 @@ int func7(int x) {
   x = x^(x>>1);
   x = !!(x << 31 >> 31);
   return x;
-
 }
 
 
@@ -238,9 +262,8 @@ int func7(int x) {
  *   Rating: 1
  */
 int func8(void) {
-
+  //minimum two's complement integer is 0x80000000 
   return 1<<31;
-
 }
 
 /*
@@ -251,7 +274,9 @@ int func8(void) {
  *   Rating: 1
  */
 int func9(int x) {
-
+  // we know that maximum integer has this quality :
+  // ~(Xmax+1) = Xmax, but -1 also has a same quality,   
+  // but -1 complement is equal to 0, Xmax's not.
   return !( (!(~x)) | (~(x+1)^x) );
 }
 
@@ -263,7 +288,7 @@ int func9(int x) {
  *   Rating: 2
  */
 int func10(int x) {
-
+  // 2's complement formula
   return ~x+1;
 
 }
@@ -277,15 +302,17 @@ int func10(int x) {
  *   Rating: 3
  */
 int func11(int x, int y) {
+
+  
+  int z = x+y; 
+  x = x >> 31; // right shift helps to define the sign 
+  y = y >> 31; // all 0's means positive, all 1's negative
+  z = z >> 31; // now x,y,z are signs of themselves 
   // x < 0 && y < 0 && z > 0 --> OVERFLOW
   // x > 0 && y > 0 && z < 0 --> OVERFLOW
-  
-  int z = x+y;
-  x = x >> 31;
-  y = y >> 31;
-  z = z >> 31;
+  // if signs are same, XOR returns 0 
+  // and we need that x and y have same sign, z different
   return !!((x^y) | !(y^z))  ;
-//  return  !(!(x^y) &  !!(y^z))   ;
 
 }
 
@@ -297,9 +324,11 @@ int func11(int x, int y) {
  *   Rating: 3
  */
 int func12(int x) {
-
+  // most significant bit defines the sign of the number
+  // by doing 31 times right shift we will obtain either 
+  // only 0's (if x > 0), or only 1's (if x < 0)
+  // for the case x == 0, we add just (!x) 
   return !( (!x) | ( x >> 31 ));
-
 }
 
 /*
@@ -314,17 +343,20 @@ int func12(int x) {
  */
 int func13(int x, int y) {
   
-  int b = (1<<31) ;
-  int a = ~b ;
+  int b = (1<<31) ; // 2's complement minimum integer
+  int a = ~b ; // 2's complement maximum integer
   int z = x+y;
   int x_s = x >> 31;
   int y_s = y >> 31;
   int z_s = z >> 31;
   int over = ~((x_s^y_s) | ~(x_s^z_s));  
-  int over_s = over & z_s ;
+  // till this line was explained in func 11 for finding overflow
+  int over_s = over & z_s ; // positive overflow if z < 0, vice versa.  
+
+  // x > 0 && y > 0 && z < 0 --> return a
+  // x < 0 && y < 0 && z > 0 --> return b
+  // else --> return z
 
   return (over_s & a & over) | ((~over_s) & b & over ) | ( z & (~over) );
 
 }
-
-
