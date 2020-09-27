@@ -1,4 +1,4 @@
-/* 
+	/* 
  * INF559 Data Lab 
  * 
  * Ali MAMMADOV, ali.mammadov
@@ -123,6 +123,7 @@ NOTES:
  *   Rating: 1
  */
 int func1(int x) {
+  // no comment :) 
   return !x;
 }
 
@@ -134,7 +135,7 @@ int func1(int x) {
  *   Rating: 1
  */
 int func2(int x, int y) {
-
+    // De Morgan's laws
     return (~x)&(~y);
 }
 
@@ -147,7 +148,9 @@ int func2(int x, int y) {
  *  Rating: 1
  */
 int func3(int n) {
-
+  // if n is 0 we will obtain 0's
+  // if not we will make the most significant bit = 1 
+  // 
   return (!!n << 31) >> (n+~0) ;
 
 }
@@ -238,7 +241,7 @@ int func7(int x) {
  *   Rating: 1
  */
 int func8(void) {
-
+  // minimum two's complement integer is 0x80000000 
   return 1<<31;
 
 }
@@ -251,7 +254,10 @@ int func8(void) {
  *   Rating: 1
  */
 int func9(int x) {
-
+  // we know that max of 2's complement 
+  // Xmax equal to ~(Xmax+1)
+  // only problem is that -1 also has this quality
+  // with adding this (!(~x)) we can easily solve it 
   return !( (!(~x)) | (~(x+1)^x) );
 }
 
@@ -263,7 +269,7 @@ int func9(int x) {
  *   Rating: 2
  */
 int func10(int x) {
-
+  // formula of 2's complement
   return ~x+1;
 
 }
@@ -277,15 +283,15 @@ int func10(int x) {
  *   Rating: 3
  */
 int func11(int x, int y) {
-  // x < 0 && y < 0 && z > 0 --> OVERFLOW
-  // x > 0 && y > 0 && z < 0 --> OVERFLOW
-  
   int z = x+y;
-  x = x >> 31;
-  y = y >> 31;
-  z = z >> 31;
+  x = x >> 31; // by making that we will obtain sign of x
+  y = y >> 31; // same for y (if all bits are 1 -> negative)
+  z = z >> 31; // same for z (if all bits are 0 -> positive)
+
+  //if the signs are same XOR will give 0
+  // x < 0 && y < 0 && z > 0 --> OVERFLOW
+  // x > 0 && y > 0 && z < 0 --> OVERFLOW 
   return !!((x^y) | !(y^z))  ;
-//  return  !(!(x^y) &  !!(y^z))   ;
 
 }
 
@@ -297,7 +303,10 @@ int func11(int x, int y) {
  *   Rating: 3
  */
 int func12(int x) {
-
+  // left shifting convert the number either:
+  // 1's(if x < 0)  or 0's(if x > 0) 
+  // and I added just (!x) for the case x = 0
+  // not(!) sign will convert it to 1 or 0
   return !( (!x) | ( x >> 31 ));
 
 }
@@ -313,18 +322,8 @@ int func12(int x) {
  *   Rating: 4
  */
 int func13(int x, int y) {
-  
-  int b = (1<<31) ;
-  int a = ~b ;
-  int z = x+y;
-  int x_s = x >> 31;
-  int y_s = y >> 31;
-  int z_s = z >> 31;
-  int over = ~((x_s^y_s) | ~(x_s^z_s));  
-  int over_s = over & z_s ;
 
-  return (over_s & a & over) | ((~over_s) & b & over ) | ( z & (~over) );
-
+  return x+y;
 }
 
 
