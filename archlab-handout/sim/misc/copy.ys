@@ -1,0 +1,47 @@
+# Copying from Source to Dest 
+.pos 0 			# starts from 0 address
+irmovq stack, %rsp  	# Set up stack pointer  
+call main		# Execute main program
+halt			# Terminate program 
+
+.align 8
+# Source block
+src:
+	.quad 0x00a
+	.quad 0x0b0
+	.quad 0xc00
+
+# Destination block
+dest:
+	.quad 0x111
+	.quad 0x222
+	.quad 0x333
+
+main: 
+	irmovq src,  %rsi # read src  in %rsi
+	irmovq dest, %rdi # read dest in %rdi 
+	irmovq $3,   %rax # size of src
+	irmovq $8,   %r9  # for doing += 8
+	irmovq $1,   %r10 # for doing --
+	xorq   %rbx, %rbx # result = 0
+	andq   %rax, %rax # Set condition codes
+
+	jmp test
+	ret
+
+loop:
+	mrmovq (%rsi), %r8    # val = *src
+	rmmovq %r8,    (%rdi) # *dest = val
+	xorq   %r8,    %rbx   # result ^= val
+	addq   %r9,    %rsi   # src   ++
+	addq   %r9,    %rdi   # dest  ++
+	subq   %r10,   %rax   # count -- 
+	
+test:
+	jne	loop
+	ret
+ 
+.pos 0x100		
+
+stack:	 
+
