@@ -1,0 +1,45 @@
+                            | # Copying from Source to Dest 
+0x000:                      | .pos 0 			# starts from 0 address
+0x000: 30f40001000000000000 | irmovq stack, %rsp  	# Set up stack pointer  
+0x00a: 804800000000000000   | call main		# Execute main program
+0x013: 00                   | halt			# Terminate program 
+                            | 
+0x018:                      | .align 8
+                            | # Source block
+0x018:                      | src:
+0x018: 0a00000000000000     | 	.quad 0x00a
+0x020: b000000000000000     | 	.quad 0x0b0
+0x028: 000c000000000000     | 	.quad 0xc00
+                            | 
+                            | # Destination block
+0x030:                      | dest:
+0x030: 1101000000000000     | 	.quad 0x111
+0x038: 2202000000000000     | 	.quad 0x222
+0x040: 3303000000000000     | 	.quad 0x333
+                            | 
+0x048:                      | main: 
+0x048: 30f61800000000000000 | 	irmovq src,  %rsi # read src  in %rsi
+0x052: 30f73000000000000000 | 	irmovq dest, %rdi # read dest in %rdi 
+0x05c: 30f00300000000000000 | 	irmovq $3,   %rax # size of src
+0x066: 30f90800000000000000 | 	irmovq $8,   %r9  # for doing += 8
+0x070: 30fa0100000000000000 | 	irmovq $1,   %r10 # for doing --
+0x07a: 6333                 | 	xorq   %rbx, %rbx # result = 0
+0x07c: 6200                 | 	andq   %rax, %rax # Set condition codes
+                            | 
+0x07e: 70a400000000000000   | 	jmp test
+0x087: 90                   | 	ret
+                            | 
+0x088:                      | loop:
+0x088: 50860000000000000000 | 	mrmovq (%rsi), %r8    # val = *src
+0x092: 40870000000000000000 | 	rmmovq %r8,    (%rdi) # *dest = val
+0x09c: 6383                 | 	xorq   %r8,    %rbx   # result ^= val
+0x09e: 6096                 | 	addq   %r9,    %rsi   # src   ++
+0x0a0: 6097                 | 	addq   %r9,    %rdi   # dest  ++
+0x0a2: 61a0                 | 	subq   %r10,   %rax   # count -- 
+                            | 	
+0x0a4:                      | test:
+0x0a4: 748800000000000000   | 	jne	loop
+0x0ad: 90                   | 	ret
+                            |  
+0x100:                      | .pos 0x100
+0x100:                      | stack:

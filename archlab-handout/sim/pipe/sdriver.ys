@@ -18,9 +18,11 @@ StartFun:
 # Copy a src block of len words to dst in reverse order.
 # Return the number of positive words (>0) contained in src.
 #
-# TODO: Include your name and ID here.
+# Ali MAMMADOV, ali.mammadov
 #
 # Describe how and why you modified the baseline code.
+#
+# First step is implementing IADDQ, which will optimize our program
 #
 ##################################################################
 # Do not modify this portion
@@ -31,34 +33,34 @@ ncopy:
 ##################################################################
 # You can modify this portion
 	# Loop header
-	xorq %rax, %rax		# count = 0;
-	andq %rdx, %rdx		# len <= 0?
-	jle Done		# if so, goto Done:
+	xorq %rax, %rax		      # count = 0;
+	andq %rdx, %rdx		      # len <= 0?
+	jle Done		            # if so, goto Done:
 
  	rrmovq %rdx, %r11       # r11 = len
-	irmovq $1, %r10
-	subq %r10, %r11         # r11--	
-Init:	andq %r11, %r11		# r11 <= 0?
-	jle Loop		# if so, goto Loop:
-	irmovq $8, %r10
-	addq %r10, %rsi		# dst++
-	irmovq $1, %r10
-	subq %r10, %r11         # r11--
+	iaddq  $-1,  %r11       # r11--
+	
+Init:
+ 	andq   %r11, %r11		    # r11 <= 0?
+	jle Loop		            # if so, goto Loop:
+	iaddq  $8,   %rsi       # dst++
+	iaddq  $-1,  %r11       # r11--
 	jmp Init
 
-Loop:	mrmovq (%rdi), %r10	# read val from src...
-	rmmovq %r10, (%rsi)	# ...and store it to dst
-	andq %r10, %r10		# val <= 0?
-	jle Npos		# if so, goto Npos:
-	irmovq $1, %r10
-	addq %r10, %rax		# count++
-Npos:	irmovq $1, %r10
-	subq %r10, %rdx		# len--
-	irmovq $8, %r10
-	addq %r10, %rdi		# src++
-	subq %r10, %rsi		# dst--
-	andq %rdx,%rdx		# len > 0?
-	jg Loop			# if so, goto Loop:
+Loop:	
+  mrmovq (%rdi), %r10	    # read val from src...
+	rmmovq %r10, (%rsi)	    # ...and store it to dst
+	andq %r10, %r10		      # val <= 0?
+	jle Npos		            # if so, goto Npos:
+	iaddq  $1, %rax		      # count++
+
+Npos:
+	iaddq  $-1,  %rdx		    # len--
+	iaddq  $8,   %rdi		    # src++
+	iaddq  $-8,  %rsi		    # dst--
+	andq   %rdx, %rdx		    # len > 0?
+	jg Loop			            # if so, goto Loop:
+
 ##################################################################
 # Do not modify the following section of code
 # Function epilogue.
@@ -75,9 +77,9 @@ EndFun:
 ###############################
 	.align 8
 src:
-	.quad 1
+	.quad -1
 	.quad -2
-	.quad -3
+	.quad 3
 	.quad 4
 	.quad 0xbcdefa # This shouldn't get moved
 

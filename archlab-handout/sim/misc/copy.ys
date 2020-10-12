@@ -41,7 +41,5 @@ test:
 	jne	loop
 	ret
  
-.pos 0x100		
-
-stack:	 
-
+.pos 0x100
+stack:
