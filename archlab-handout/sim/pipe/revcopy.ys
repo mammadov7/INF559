@@ -35,7 +35,7 @@ Init:
 	jmp Init
 
 Loop:	
-   	mrmovq (%rdi), %r10     # read val from src...
+   	mrmovq (%rdi), %r10   # read val from src...
 	rmmovq %r10, (%rsi)     # ...and store it to dst
 	andq %r10, %r10	        # val <= 0?
 	jle Npos                # if so, goto Npos:
