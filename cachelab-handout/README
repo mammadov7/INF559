@@ -1,0 +1,39 @@
+This is the handout directory for the INF 559 Cache Lab. 
+
+************************
+Running the autograders:
+************************
+
+Before running the autograders, compile your code:
+    linux> make
+
+Check the correctness of your simulator:
+    linux> ./test-csim
+
+Check the correctness and performance of your rotate functions:
+    linux> ./test-rotate -N 32
+    linux> ./test-rotate -N 64
+    linux> ./test-rotate -N 67
+
+Check everything at once (this is the program that your instructor runs):
+    linux> ./driver.py    
+
+******
+Files:
+******
+
+# You will modifying and handing in these two files
+csim.c        Your cache simulator
+rotate.c      Your rotate function
+
+# Tools for evaluating your simulator and rotate function
+Makefile      Builds the simulator and tools
+README        This file
+driver.py*    The driver program, runs test-csim and test-rotate
+cachelab.c    Required helper functions
+cachelab.h    Required header file
+csim-ref*     The executable reference cache simulator
+test-csim*    Tests your cache simulator
+test-rotate.c Tests your rotate function
+tracegen.c    Helper program used by test-rotate
+traces/       Trace files used by test-csim.c
