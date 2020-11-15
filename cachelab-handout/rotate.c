@@ -22,6 +22,13 @@ int is_rotate(int N, int A[N][N], int B[N][N]);
 char rotate_submit_desc[] = "Rotate submission";
 void rotate_submit(int N, int A[N][N], int B[N][N])
 {
+  int row, col;
+  for(row=0; row < N; ++row) {
+    for(col=0; col < N; ++col) {
+      B[col][N-1-row] = A[row][col];
+    }
+  }
+
 }
 
 /* 
