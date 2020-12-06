@@ -20,21 +20,22 @@ int is_rotate(int N, int A[N][N], int B[N][N]);
  *     be graded. 
  */
 char rotate_submit_desc[] = "Rotate submission";
-void rotate_submit(int N, int A[N][N], int B[N][N])
-{
-  int block = 8;
-  int row, col;
-  for(row=0; row < N; row += block) {
-    for(col=0; col < N; col += block) {
-      for (int i = row; i < row+block; i++) {
-        for (int j = col; j < col+block; j++){
-          B[j][N-1-i] = A[i][j];
-        }        
-      }
-    }
-  }
+void rotate_submit(int N, int A[N][N], int B[N][N]);
+void rotate_submit(int N, int A[N][N], int B[N][N]){
+  
+  int block, row, col, i, j;
+  if ( N == 32 ) block = 4; 
+  else if (N==67) block = 16; 
+  else block = 4;
 
+  for(row=0; row < N; row += block) 
+    for(col=0; col < N; col += block) 
+      for (i = row; i < (row+block) && i < N ; i++) 
+        for (j = col; j < (col+block) && j < N; j++)
+          // B[i][j] = A[N-j-1][i]; 
+          B[j][N-1-i] = A[i][j]; 
 }
+
 
 /* 
  * You can define additional rotate functions below. We've defined
